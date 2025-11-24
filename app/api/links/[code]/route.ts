@@ -58,3 +58,37 @@ export async function GET(
     }
   );
 }
+
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: Props["params"] }
+) {
+  const resolvedParams = (await params) as Props["params"];
+  const { code } = resolvedParams ?? {};
+
+  if (!code)
+    return Response.json(
+      { ok: false, error: "Code is required" },
+      { status: 400 }
+    );
+
+  const link = await prisma.link.findUnique({ where: { code } });
+
+  if (!link) {
+    return Response.json(
+      { ok: false, error: "Link not found" },
+      { status: 404 }
+    );
+  }
+
+  await prisma.link.update({
+    where: { code },
+    data: { deleted: true },
+  });
+
+  return Response.json(
+    { ok: true, message: "Link deleted successfully" },
+    { status: 200 }
+  );
+}
