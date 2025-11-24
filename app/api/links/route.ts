@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import z from "zod";
+import { customAlphabet } from "nanoid";
 
 export async function GET() {
   const linksCount = await prisma.link.count();
@@ -54,17 +55,6 @@ export async function POST(request: Request) {
 
   const CODE_REGEX = /^[A-Za-z0-9]{6,8}$/;
 
-  // helper to generate random code of length 6-8
-  function generateCode() {
-    const length = Math.floor(Math.random() * 3) + 6; // 6,7,8
-    const chars =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let out = "";
-    for (let i = 0; i < length; i++)
-      out += chars.charAt(Math.floor(Math.random() * chars.length));
-    return out;
-  }
-
   // Ensure provided code, if present, matches the format
   if (providedCode !== undefined && !CODE_REGEX.test(providedCode)) {
     return Response.json(
@@ -109,9 +99,12 @@ export async function POST(request: Request) {
   const MAX_ATTEMPTS = 10;
   let attempt = 0;
   let code = "";
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   while (attempt < MAX_ATTEMPTS) {
     attempt += 1;
-    const candidate = generateCode();
+    const length = Math.floor(Math.random() * 3) + 6; //max length 6,7,8
+    const nano = customAlphabet(alphabet, length);
+    const candidate = nano();
     const exists = await prisma.link.findUnique({ where: { code: candidate } });
     if (!exists) {
       code = candidate;
