@@ -8,7 +8,10 @@ export async function GET() {
   const hours = Math.floor((totalSeconds % 86400) / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = totalSeconds % 60;
-  const uptime = formatDuration({ days, hours, minutes, seconds }, { delimiter: ", " });
+  const uptime = formatDuration(
+    { days, hours, minutes, seconds },
+    { delimiter: ", " }
+  );
 
   let db: { ok: boolean; error?: string } = { ok: false };
   try {
@@ -27,5 +30,8 @@ export async function GET() {
     Refresh: "30",
   };
 
-  return Response.json({ ok: true, version: "1.0", uptime, db }, { status: 200, headers });
+  return Response.json(
+    { ok: true, version: "1.0", uptime, db },
+    { status: 200, headers }
+  );
 }
