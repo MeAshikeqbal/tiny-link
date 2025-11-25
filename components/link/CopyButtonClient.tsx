@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Copy } from "lucide-react"
 
 interface Props {
+  name?: string
   text: string
   className?: string
 }
 
-export default function CopyButtonClient({ text, className }: Props) {
+export default function CopyButtonClient({ name, text, className }: Props) {
   const [copied, setCopied] = React.useState(false)
 
   async function handleClick() {
@@ -26,7 +27,7 @@ export default function CopyButtonClient({ text, className }: Props) {
     <Button variant="ghost" className={className} onClick={handleClick}>
       <div className="flex items-center space-x-2 border-b border-dashed border-transparent hover:border-current">
         <Copy size={16} />
-        <span className="">{copied ? "Copied!" : "Copy to clipboard"}</span>
+        <span className="">{copied ? "Copied!" : `Copy ${name ?? "to clipboard"}`}</span>
       </div>
     </Button>
   )
