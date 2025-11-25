@@ -1,10 +1,11 @@
 import { prisma } from "@/lib/prisma"
 import { formatUTC } from "@/lib/date"
-import { BarChart3, ExternalLink, Plus, TrendingUp } from "lucide-react"
+import { BarChart3, ExternalLink, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { DashboardHeader } from "@/components/dashboard/dashboard-header"
 import { DataTable } from "@/components/dashboard/data-table"
 import { columns } from "@/components/dashboard/columns"
+import { DashboardTableHeader } from "@/components/dashboard/dashboard-table-header"
 
 
 export default async function DashboardPage() {
@@ -87,16 +88,7 @@ export default async function DashboardPage() {
 
         {/* Links Table */}
         <div className="rounded-xl border border-border bg-card overflow-hidden">
-          <div className="p-6 border-b border-border flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-bold text-foreground">All Links</h2>
-              <p className="text-sm text-muted-foreground mt-1">Manage and track your shortened URLs</p>
-            </div>
-            <Button className="gap-2">
-              <Plus className="w-4 h-4" />
-              New Link
-            </Button>
-          </div>
+          <DashboardTableHeader />
           <DataTable columns={columns} data={normalizedLinks} />
         </div>
 

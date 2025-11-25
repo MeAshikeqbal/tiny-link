@@ -36,7 +36,6 @@ export const columns: ColumnDef<Code>[] = [
         enableSorting: false,
         enableHiding: false,
     },
-
     {
         accessorKey: "id",
         header: ({ column }) => {
