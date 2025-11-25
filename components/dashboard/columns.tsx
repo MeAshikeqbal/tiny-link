@@ -67,6 +67,7 @@ const DeleteConfirmDialog = ({ code, onConfirm }: { code: string; onConfirm?: ()
             }
         } catch (err) {
             setError(String(err))
+            console.error("Delete failed", err)
         } finally {
             setLoading(false)
         }

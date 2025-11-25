@@ -6,7 +6,7 @@ import { Input } from "../ui/input"
 
 export function DashboardTableHeader() {
   return (
-    <div className="p-6 border-b border-border flex items-center justify-between">
+    <div className="p-6 border-b  flex items-center justify-between">
       <div>
         <h2 className="text-xl font-bold text-foreground">All Links</h2>
         <p className="text-sm text-muted-foreground mt-1">Manage and track your shortened URLs</p>
