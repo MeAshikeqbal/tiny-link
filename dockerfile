@@ -3,10 +3,12 @@ WORKDIR /app
 # Copy repository first so postinstall hooks (prisma generate) can find schema
 # Use Node 24 to satisfy Prisma engine requirements
 COPY . .
-# Install full deps to allow build step to succeed (runs postinstall/prisma generate)
-RUN npm ci
-# If you have a build step (e.g. bundling/tsc), run it; harmless if not present
-RUN npm run build || true
+# Install full deps but skip lifecycle scripts to avoid relying on postinstall hooks
+# that may expect runtime-only files. Run Prisma generate explicitly using the
+# known schema path so it succeeds during build.
+RUN npm ci --ignore-scripts \
+	&& npx prisma generate --schema=prisma/schema.prisma \
+	&& npm run build || true
 
 FROM node:24-alpine AS runner
 WORKDIR /app
