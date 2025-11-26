@@ -8,7 +8,7 @@ COPY . .
 # known schema path so it succeeds during build.
 RUN npm ci --ignore-scripts \
 	&& npx prisma generate --schema=prisma/schema.prisma \
-	&& npm run build || true
+	&& npm run build
 
 FROM node:24-alpine AS runner
 WORKDIR /app
