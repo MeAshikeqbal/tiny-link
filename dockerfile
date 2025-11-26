@@ -7,7 +7,7 @@ COPY . .
 # If you have a build step (e.g. bundling/tsc), run it; harmless if not present
 RUN npm run build || true
 
-FROM node:20-alpine AS runner
+FROM node:25-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 # Install only production deps for smaller image
