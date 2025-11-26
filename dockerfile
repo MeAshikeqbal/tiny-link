@@ -3,6 +3,11 @@ WORKDIR /app
 # Copy repository first so postinstall hooks (prisma generate) can find schema
 # Use Node 24 to satisfy Prisma engine requirements
 COPY . .
+# Provide a build-time placeholder `DATABASE_URL` so Prisma can parse the
+# datasource when running `prisma generate` during the image build. This
+# value is a harmless placeholder and is NOT used at runtime. If you run
+# database-related generators that require a live DB, adjust this step in CI.
+ENV DATABASE_URL="postgresql://noop:noop@localhost:5432/noop"
 # Install full deps but skip lifecycle scripts to avoid relying on postinstall hooks
 # that may expect runtime-only files. Run Prisma generate explicitly using the
 # known schema path so it succeeds during build.
