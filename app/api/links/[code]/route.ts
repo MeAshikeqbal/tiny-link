@@ -8,7 +8,7 @@ type Props = {
 
 export async function GET(
   request: Request,
-  { params }: { params: Props["params"] }
+  { params }: { params: Promise<Props["params"]> }
 ) {
   const resolvedParams = (await params) as Props["params"];
   const { code } = resolvedParams ?? {};
@@ -62,7 +62,7 @@ export async function GET(
 
 export async function DELETE(
   request: Request,
-  { params }: { params: Props["params"] }
+  { params }: { params: Promise<Props["params"]> }
 ) {
   const resolvedParams = (await params) as Props["params"];
   const { code } = resolvedParams ?? {};
