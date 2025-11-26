@@ -1,19 +1,19 @@
-FROM node:18-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
-# Install full deps to allow build step to succeed
-COPY package*.json ./
-RUN npm ci
+# Copy repository first so postinstall hooks (prisma generate) can find schema
+# Use Node 24 to satisfy Prisma engine requirements
 COPY . .
+# Install full deps to allow build step to succeed (runs postinstall/prisma generate)
+RUN npm ci
 # If you have a build step (e.g. bundling/tsc), run it; harmless if not present
 RUN npm run build || true
 
-FROM node:25-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-# Install only production deps for smaller image
-COPY package*.json ./
-RUN npm ci --only=production
-# Copy application (including built artifacts from builder)
+# Copy application (including node_modules built in builder)
+# We copy the built app and node_modules from the builder stage to avoid
+# re-running npm in the runner where the prisma schema may not be present.
 COPY --from=builder /app ./
 EXPOSE 3000
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -q -O- http://localhost:3000/ || exit 1
