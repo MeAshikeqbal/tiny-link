@@ -8,6 +8,8 @@ import { columns } from "@/components/dashboard/columns"
 import { DashboardTableHeader } from "@/components/dashboard/dashboard-table-header"
 
 
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage() {
   const links = await prisma.link.findMany({
     where: { deleted: false },
